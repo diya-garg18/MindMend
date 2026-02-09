@@ -1,0 +1,198 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* MindMend Design System - Calming, Professional Mental Health Theme
+   Color palette: Calming blues and greens with clean whites
+   Typography: Clean, readable sans-serif fonts
+   Spacing: Generous whitespace for a peaceful, uncluttered feel
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+@layer base {
+  :root {
+    /* Primary: Calming teal-blue */
+    --primary: 187 65% 42%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Background: Soft warm white */
+    --background: 180 20% 99%;
+    --foreground: 200 25% 20%;
+
+    /* Cards: Pure white with subtle warmth */
+    --card: 0 0% 100%;
+    --card-foreground: 200 25% 20%;
+
+    /* Popover */
+    --popover: 0 0% 100%;
+    --popover-foreground: 200 25% 20%;
+
+    /* Secondary: Soft sage green */
+    --secondary: 160 25% 94%;
+    --secondary-foreground: 160 30% 25%;
+
+    /* Muted: Light gray-blue */
+    --muted: 200 20% 96%;
+    --muted-foreground: 200 15% 50%;
+
+    /* Accent: Soft lavender for highlights */
+    --accent: 220 40% 95%;
+    --accent-foreground: 220 40% 35%;
+
+    /* Success: Calming green */
+    --success: 152 55% 45%;
+    --success-foreground: 0 0% 100%;
+
+    /* Warning: Soft amber */
+    --warning: 38 92% 55%;
+    --warning-foreground: 0 0% 100%;
+
+    /* Destructive: Muted coral for sensitivity */
+    --destructive: 0 55% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Borders and inputs */
+    --border: 200 20% 88%;
+    --input: 200 20% 92%;
+    --ring: 187 65% 42%;
+
+    --radius: 0.75rem;
+
+    /* Sidebar - calming seafoam */
+    --sidebar-background: 180 30% 97%;
+    --sidebar-foreground: 200 25% 30%;
+    --sidebar-primary: 187 65% 42%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 160 25% 94%;
+    --sidebar-accent-foreground: 160 30% 25%;
+    --sidebar-border: 180 20% 90%;
+    --sidebar-ring: 187 65% 42%;
+
+    /* Custom mood colors */
+    --mood-great: 152 55% 45%;
+    --mood-good: 160 45% 55%;
+    --mood-okay: 45 70% 55%;
+    --mood-low: 25 80% 55%;
+    --mood-struggling: 0 55% 55%;
+
+    /* Gradients */
+    --gradient-calm: linear-gradient(135deg, hsl(187 65% 42%) 0%, hsl(160 45% 50%) 100%);
+    --gradient-warm: linear-gradient(135deg, hsl(180 30% 97%) 0%, hsl(160 25% 95%) 100%);
+  }
+
+  .dark {
+    --primary: 187 55% 55%;
+    --primary-foreground: 200 25% 10%;
+
+    --background: 200 25% 10%;
+    --foreground: 180 15% 92%;
+
+    --card: 200 25% 13%;
+    --card-foreground: 180 15% 92%;
+
+    --popover: 200 25% 13%;
+    --popover-foreground: 180 15% 92%;
+
+    --secondary: 200 20% 18%;
+    --secondary-foreground: 180 15% 90%;
+
+    --muted: 200 20% 18%;
+    --muted-foreground: 200 15% 60%;
+
+    --accent: 200 20% 20%;
+    --accent-foreground: 180 15% 90%;
+
+    --success: 152 45% 45%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 80% 50%;
+    --warning-foreground: 0 0% 100%;
+
+    --destructive: 0 50% 45%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 200 20% 20%;
+    --input: 200 20% 18%;
+    --ring: 187 55% 55%;
+
+    --sidebar-background: 200 25% 8%;
+    --sidebar-foreground: 180 15% 90%;
+    --sidebar-primary: 187 55% 55%;
+    --sidebar-primary-foreground: 200 25% 10%;
+    --sidebar-accent: 200 20% 15%;
+    --sidebar-accent-foreground: 180 15% 90%;
+    --sidebar-border: 200 20% 15%;
+    --sidebar-ring: 187 55% 55%;
+
+    --mood-great: 152 45% 50%;
+    --mood-good: 160 40% 55%;
+    --mood-okay: 45 60% 50%;
+    --mood-low: 25 70% 50%;
+    --mood-struggling: 0 50% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+}
+
+@layer utilities {
+  .gradient-calm {
+    background: var(--gradient-calm);
+  }
+
+  .gradient-warm {
+    background: var(--gradient-warm);
+  }
+
+  .animate-breathing {
+    animation: breathing 4s ease-in-out infinite;
+  }
+
+  .animate-pulse-gentle {
+    animation: pulse-gentle 3s ease-in-out infinite;
+  }
+
+  .glass-effect {
+    @apply bg-white/80 backdrop-blur-sm;
+  }
+
+  .dark .glass-effect {
+    @apply bg-card/80 backdrop-blur-sm;
+  }
+}
+
+@keyframes breathing {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse-gentle {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
