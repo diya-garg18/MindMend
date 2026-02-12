@@ -63,7 +63,7 @@ export function AppSidebar() {
             "rounded-xl gradient-calm flex items-center justify-center shadow-md shrink-0",
             collapsed ? "w-8 h-8" : "w-10 h-10"
           )}>
-            <Brain className={cn("text-primary-foreground", collapsed ? "w-4 h-4" : "w-5 h-5")} />
+            <Brain className={cn("text-primary-foreground shrink-0", collapsed ? "w-4 h-4" : "w-5 h-5")} />
           </div>
           {!collapsed && (
             <div className="overflow-hidden">
@@ -90,13 +90,13 @@ export function AppSidebar() {
                       to={item.url}
                       className={cn(
                         "flex items-center rounded-lg transition-colors",
-                        collapsed ? "justify-center p-2" : "gap-3 px-3 py-2",
+                        collapsed ? "justify-center p-2.5 min-h-[44px]" : "gap-3 px-3 py-2.5",
                         isActive(item.url)
                           ? "bg-sidebar-accent text-sidebar-primary font-medium"
                           : "text-sidebar-foreground hover:bg-sidebar-accent/50"
                       )}
                     >
-                      <item.icon className={cn("shrink-0", collapsed ? "w-5 h-5" : "w-5 h-5")} />
+                      <item.icon className="w-5 h-5 shrink-0" style={{ minWidth: '20px', minHeight: '20px' }} />
                       {!collapsed && <span>{item.title}</span>}
                     </NavLink>
                   </SidebarMenuButton>
@@ -121,13 +121,13 @@ export function AppSidebar() {
                       to={item.url}
                       className={cn(
                         "flex items-center rounded-lg transition-colors",
-                        collapsed ? "justify-center p-2" : "gap-3 px-3 py-2",
+                        collapsed ? "justify-center p-2.5 min-h-[44px]" : "gap-3 px-3 py-2.5",
                         isActive(item.url)
                           ? "bg-sidebar-accent text-sidebar-primary font-medium"
                           : "text-sidebar-foreground hover:bg-sidebar-accent/50"
                       )}
                     >
-                      <item.icon className={cn("shrink-0", collapsed ? "w-5 h-5" : "w-5 h-5")} />
+                      <item.icon className="w-5 h-5 shrink-0" style={{ minWidth: '20px', minHeight: '20px' }} />
                       {!collapsed && <span>{item.title}</span>}
                     </NavLink>
                   </SidebarMenuButton>
@@ -152,13 +152,13 @@ export function AppSidebar() {
                       to={item.url}
                       className={cn(
                         "flex items-center rounded-lg transition-colors",
-                        collapsed ? "justify-center p-2" : "gap-3 px-3 py-2",
+                        collapsed ? "justify-center p-2.5 min-h-[44px]" : "gap-3 px-3 py-2.5",
                         isActive(item.url)
                           ? "bg-sidebar-accent text-sidebar-primary font-medium"
                           : "text-sidebar-foreground hover:bg-sidebar-accent/50"
                       )}
                     >
-                      <item.icon className={cn("shrink-0", collapsed ? "w-5 h-5" : "w-5 h-5")} />
+                      <item.icon className="w-5 h-5 shrink-0" style={{ minWidth: '20px', minHeight: '20px' }} />
                       {!collapsed && <span>{item.title}</span>}
                     </NavLink>
                   </SidebarMenuButton>
@@ -175,24 +175,24 @@ export function AppSidebar() {
           to="/profile"
           className={cn(
             "flex items-center rounded-lg mb-2 transition-colors",
-            collapsed ? "justify-center p-2" : "gap-3 px-3 py-2",
+            collapsed ? "justify-center p-2.5 min-h-[44px]" : "gap-3 px-3 py-2.5",
             isActive('/profile')
               ? "bg-sidebar-accent text-sidebar-primary font-medium"
               : "text-sidebar-foreground hover:bg-sidebar-accent/50"
           )}
         >
-          <User className="w-5 h-5 shrink-0" />
+          <User className="w-5 h-5 shrink-0" style={{ minWidth: '20px', minHeight: '20px' }} />
           {!collapsed && <span>Profile</span>}
         </NavLink>
         <Button
           variant="ghost"
           className={cn(
-            "w-full text-muted-foreground hover:text-destructive",
-            collapsed ? "justify-center p-2" : "justify-start gap-3"
+            "w-full text-muted-foreground hover:text-destructive min-h-[44px]",
+            collapsed ? "justify-center p-2.5" : "justify-start gap-3 px-3"
           )}
           onClick={signOut}
         >
-          <LogOut className="w-5 h-5 shrink-0" />
+          <LogOut className="w-5 h-5 shrink-0" style={{ minWidth: '20px', minHeight: '20px' }} />
           {!collapsed && <span>Sign Out</span>}
         </Button>
       </SidebarFooter>
