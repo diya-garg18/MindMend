@@ -24,6 +24,8 @@ import Profile from "./pages/Profile";
 import Resources from "./pages/Resources";
 import GuestChat from "./pages/GuestChat";
 import NotFound from "./pages/NotFound";
+import DailyReminderPopup from "@/components/DailyReminderPopup";
+
 
 const queryClient = new QueryClient();
 
@@ -132,6 +134,7 @@ const App = () => (
               {/* Emergency button visible everywhere */}
               <EmergencyButton />
               <FloatingMusicPlayer />
+              <DailyReminderPopup />
             </BrowserRouter>
             </MusicPlayerProvider>
           </TooltipProvider>

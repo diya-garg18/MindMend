@@ -54,6 +54,22 @@ const crisisResourcesByCountry: Record<string, CountryResources> = {
         icon: Heart,
         primary: false,
       },
+      {
+        name: 'National Suicide Prevention Lifeline (Chat)',
+        description: '24/7 online chat support via 988 Lifeline website.',
+        phone: '988',
+        url: 'https://988lifeline.org/chat/',
+        icon: Globe,
+        primary: false,
+      },
+      {
+        name: 'Veterans Crisis Line',
+        description: '24/7 support for veterans and their families. Dial 988 then press 1.',
+        phone: '988',
+        url: 'https://www.veteranscrisisline.net',
+        icon: Users,
+        primary: false,
+      },
     ],
   },
   IN: {
@@ -99,6 +115,30 @@ const crisisResourcesByCountry: Record<string, CountryResources> = {
         icon: Heart,
         primary: false,
       },
+      {
+        name: 'Kiran Mental Health Helpline',
+        description: '24/7 national mental health helpline by Government of India. 1800-599-0019',
+        phone: '1800-599-0019',
+        url: 'https://www.mohfw.gov.in',
+        icon: Phone,
+        primary: true,
+      },
+      {
+        name: 'Fortis Stress Helpline',
+        description: '24/7 mental health support. +91-8376804102',
+        phone: '+918376804102',
+        url: 'https://www.fortishealthcare.com',
+        icon: Phone,
+        primary: false,
+      },
+      {
+        name: 'Connecting NGO',
+        description: 'Emotional support helpline (24/7). 9922001122',
+        phone: '9922001122',
+        url: 'https://connectingngo.org',
+        icon: Heart,
+        primary: false,
+      },
     ],
   },
   UK: {
@@ -136,6 +176,22 @@ const crisisResourcesByCountry: Record<string, CountryResources> = {
         icon: Heart,
         primary: false,
       },
+      {
+        name: 'Shout Crisis Text Service',
+        description: '24/7 text support. Text SHOUT to 85258.',
+        phone: '85258',
+        url: 'https://giveusashout.org',
+        icon: Phone,
+        primary: true,
+      },
+      {
+        name: 'NHS Urgent Mental Health Helpline',
+        description: '24/7 urgent mental health support via NHS services.',
+        phone: '111',
+        url: 'https://www.nhs.uk/service-search/mental-health/find-an-urgent-mental-health-helpline',
+        icon: Users,
+        primary: false,
+      },
     ],
   },
   AU: {
@@ -165,6 +221,14 @@ const crisisResourcesByCountry: Record<string, CountryResources> = {
         icon: Heart,
         primary: false,
       },
+      {
+        name: 'Suicide Call Back Service',
+        description: '24/7 nationwide crisis counselling. 1300 659 467',
+        phone: '1300659467',
+        url: 'https://www.suicidecallbackservice.org.au',
+        icon: Phone,
+        primary: false,
+      },
     ],
   },
   CA: {
@@ -186,6 +250,22 @@ const crisisResourcesByCountry: Record<string, CountryResources> = {
         icon: Phone,
         primary: true,
       },
+      {
+        name: 'Talk Suicide Canada',
+        description: '24/7 suicide prevention support. 1-833-456-4566',
+        phone: '1-833-456-4566',
+        url: 'https://talksuicide.ca',
+        icon: Phone,
+        primary: false,
+      },
+      {
+        name: 'Wellness Together Canada',
+        description: '24/7 mental health and substance use support.',
+        phone: '1-866-585-0445',
+        url: 'https://www.wellnesstogether.ca',
+        icon: Globe,
+        primary: false,
+      },
     ],
   },
 };
@@ -204,6 +284,7 @@ const selfCareReminders = [
   "Recovery isn't linear — bad days don't erase your progress.",
   "You are not alone. Many people struggle with mental health.",
   "Taking a break is not giving up. Rest is necessary.",
+  
 ];
 
 export default function Crisis() {
