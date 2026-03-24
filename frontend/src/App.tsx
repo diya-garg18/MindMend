@@ -6,6 +6,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import { ThemeProvider } from "@/hooks/useTheme";
 import { GuestModeProvider } from "@/hooks/useGuestMode";
+import { MusicPlayerProvider } from '@/hooks/useMusicPlayer';
+import FloatingMusicPlayer from '@/components/FloatingMusicPlayer';
 import ProtectedRoute from "@/components/ProtectedRoute";
 import AppLayout from "@/components/layout/AppLayout";
 import EmergencyButton from "@/components/EmergencyButton";
@@ -33,7 +35,8 @@ const App = () => (
           <TooltipProvider>
             <Toaster />
             <Sonner />
-            <BrowserRouter>
+            <MusicPlayerProvider>
+            <BrowserRouter basename="/MindMend">
               <Routes>
                 {/* Public routes */}
                 <Route path="/" element={<Index />} />
@@ -128,7 +131,9 @@ const App = () => (
               </Routes>
               {/* Emergency button visible everywhere */}
               <EmergencyButton />
+              <FloatingMusicPlayer />
             </BrowserRouter>
+            </MusicPlayerProvider>
           </TooltipProvider>
         </GuestModeProvider>
       </AuthProvider>

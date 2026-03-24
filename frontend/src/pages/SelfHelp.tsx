@@ -1,9 +1,27 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Wind, Eye, Heart, RefreshCw, BookOpen } from 'lucide-react';
+import { Music, Play, Pause, Volume2, VolumeX, Flower2, ChevronLeft, ChevronRight, Timer, RotateCcw } from 'lucide-react';
+import { Slider } from '@/components/ui/slider';
+import { Progress } from '@/components/ui/progress';
+// Audio
+import gentleRain from '@/assets/audio/gentle-rain.mp3';
+import oceanWaves from '@/assets/audio/ocean-waves.mp3';
+import forestBirds from '@/assets/audio/forest-birds.mp3';
+import peacefulPiano from '@/assets/audio/peaceful-piano.mp3';
+import nightCrickets from '@/assets/audio/night-crickets.mp3';
 
+// Yoga images
+import childsPose from '@/assets/yoga/childs-pose.jpg';
+import catCow from '@/assets/yoga/cat-cow.jpg';
+import legsUpWall from '@/assets/yoga/legs-up-wall.jpg';
+import seatedForwardFold from '@/assets/yoga/seated-forward-fold.jpg';
+import corpsePose from '@/assets/yoga/corpse-pose.jpg';
+import standingForwardBend from '@/assets/yoga/standing-forward-bend.jpg';
+import spinalTwist from '@/assets/yoga/spinal-twist.jpg';
+import bridgePose from '@/assets/yoga/bridge-pose.jpg';
 // Breathing Exercise Component
 function BreathingExercise() {
   const [isActive, setIsActive] = useState(false);
@@ -270,6 +288,482 @@ function ThoughtReframing() {
     </Card>
   );
 }
+interface Track {
+  title: string;
+  description: string;
+  url: string;
+  emoji: string;
+}
+
+const tracks: Track[] = [
+  {
+    title: 'Gentle Rain',
+    description: 'Soft rainfall for deep relaxation',
+    url: gentleRain,
+    emoji: '🌧️',
+  },
+  {
+    title: 'Ocean Waves',
+    description: 'Peaceful ocean sounds to calm your mind',
+    url: oceanWaves,
+    emoji: '🌊',
+  },
+  {
+    title: 'Forest Birds',
+    description: 'Birdsong in a tranquil forest',
+    url: forestBirds,
+    emoji: '🐦',
+  },
+  {
+    title: 'Peaceful Piano',
+    description: 'Gentle piano melodies for focus and calm',
+    url: peacefulPiano,
+    emoji: '🎹',
+  },
+  {
+    title: 'Night Crickets',
+    description: 'Evening ambience with crickets chirping',
+    url: nightCrickets,
+    emoji: '🦗',
+  },
+];
+
+function CalmingMusic() {
+  const [currentTrack, setCurrentTrack] = useState<number | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [volume, setVolume] = useState(70);
+  const [isMuted, setIsMuted] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    return () => {
+      audioRef.current?.pause();
+    };
+  }, []);
+
+  const playTrack = (index: number) => {
+    if (currentTrack === index && isPlaying) {
+      audioRef.current?.pause();
+      setIsPlaying(false);
+      return;
+    }
+
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
+
+    const audio = new Audio(tracks[index].url);
+    audio.volume = isMuted ? 0 : volume / 100;
+    audio.loop = true;
+    audio.preload = 'auto';
+
+    audio.addEventListener('playing', () => {
+      setIsPlaying(true);
+    });
+
+    audio.addEventListener('pause', () => {
+      setIsPlaying(false);
+    });
+
+    audio.addEventListener('error', () => {
+      setIsPlaying(false);
+    });
+
+    audioRef.current = audio;
+    setCurrentTrack(index);
+    audio.play().catch(() => {
+      setIsPlaying(false);
+    });
+  };
+
+  const handleVolumeChange = (val: number[]) => {
+    const v = val[0];
+    setVolume(v);
+    setIsMuted(v === 0);
+    if (audioRef.current) {
+      audioRef.current.volume = v / 100;
+    }
+  };
+
+  const toggleMute = () => {
+    const newMuted = !isMuted;
+    setIsMuted(newMuted);
+    if (audioRef.current) {
+      audioRef.current.volume = newMuted ? 0 : volume / 100;
+    }
+  };
+
+  return (
+    <Card className="border-0 shadow-lg">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2 font-display">
+          <Music className="w-5 h-5 text-primary" />
+          Calming Sounds
+        </CardTitle>
+        <CardDescription>
+          Ambient sounds and music to help you relax, focus, or sleep.
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-5">
+        {/* Volume control */}
+        <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
+          <Button variant="ghost" size="icon" onClick={toggleMute} className="shrink-0">
+            {isMuted || volume === 0 ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+          </Button>
+          <Slider
+            value={[isMuted ? 0 : volume]}
+            onValueChange={handleVolumeChange}
+            max={100}
+            step={1}
+            className="flex-1"
+          />
+          <span className="text-xs text-muted-foreground w-8 text-right">{isMuted ? 0 : volume}%</span>
+        </div>
+
+        {/* Track list */}
+        <div className="grid gap-3">
+          {tracks.map((track, i) => {
+            const active = currentTrack === i && isPlaying;
+            return (
+              <button
+                key={i}
+                onClick={() => playTrack(i)}
+                className={`flex items-center gap-4 p-4 rounded-xl text-left transition-all ${
+                  active
+                    ? 'bg-primary/10 ring-2 ring-primary/30'
+                    : 'bg-muted/30 hover:bg-muted/60'
+                }`}
+              >
+                <span className="text-3xl">{track.emoji}</span>
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium text-foreground">{track.title}</p>
+                  <p className="text-sm text-muted-foreground truncate">{track.description}</p>
+                </div>
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${
+                  active ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
+                }`}>
+                  {active ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        <p className="text-xs text-muted-foreground text-center">
+          🎧 Tip: Use headphones for the best experience. Sounds loop continuously.
+        </p>
+      </CardContent>
+    </Card>
+  );
+}
+
+interface Pose {
+  name: string;
+  sanskrit: string;
+  image: string;
+  durationLabel: string;
+  durationSeconds: number;
+  difficulty: 'Beginner' | 'Intermediate';
+  benefits: string[];
+  instructions: string[];
+}
+
+const poses: Pose[] = [
+  {
+    name: "Child's Pose",
+    sanskrit: 'Balasana',
+    image: childsPose,
+    durationLabel: '1-3 min',
+    durationSeconds: 120,
+    difficulty: 'Beginner',
+    benefits: ['Relieves stress & fatigue', 'Gently stretches hips and back', 'Calms the mind'],
+    instructions: [
+      'Kneel on the floor with big toes touching',
+      'Sit back on your heels',
+      'Fold forward, extending arms in front or alongside your body',
+      'Rest your forehead on the mat',
+      'Breathe deeply and hold',
+    ],
+  },
+  {
+    name: 'Cat-Cow Stretch',
+    sanskrit: 'Marjaryasana-Bitilasana',
+    image: catCow,
+    durationLabel: '1-2 min',
+    durationSeconds: 90,
+    difficulty: 'Beginner',
+    benefits: ['Releases spine tension', 'Improves posture', 'Coordinates breath with movement'],
+    instructions: [
+      'Start on hands and knees (tabletop position)',
+      'Inhale: drop belly, lift chest and tailbone (Cow)',
+      'Exhale: round spine, tuck chin to chest (Cat)',
+      'Flow between the two with each breath',
+      'Repeat 8-10 times',
+    ],
+  },
+  {
+    name: 'Legs Up the Wall',
+    sanskrit: 'Viparita Karani',
+    image: legsUpWall,
+    durationLabel: '3-5 min',
+    durationSeconds: 240,
+    difficulty: 'Beginner',
+    benefits: ['Reduces anxiety', 'Relieves tired legs', 'Promotes deep relaxation'],
+    instructions: [
+      'Sit sideways next to a wall',
+      'Swing your legs up the wall as you lie back',
+      'Scoot your hips as close to the wall as comfortable',
+      'Rest arms by your sides, palms up',
+      'Close your eyes and breathe naturally',
+    ],
+  },
+  {
+    name: 'Seated Forward Fold',
+    sanskrit: 'Paschimottanasana',
+    image: seatedForwardFold,
+    durationLabel: '1-3 min',
+    durationSeconds: 120,
+    difficulty: 'Beginner',
+    benefits: ['Calms the nervous system', 'Stretches hamstrings & spine', 'Reduces headaches'],
+    instructions: [
+      'Sit with legs extended straight in front',
+      'Inhale and lengthen your spine',
+      'Exhale and fold forward from hips',
+      'Reach for shins, ankles, or feet',
+      'Relax your neck and hold',
+    ],
+  },
+  {
+    name: 'Corpse Pose',
+    sanskrit: 'Savasana',
+    image: corpsePose,
+    durationLabel: '5-10 min',
+    durationSeconds: 300,
+    difficulty: 'Beginner',
+    benefits: ['Deep relaxation', 'Reduces blood pressure', 'Integrates practice benefits'],
+    instructions: [
+      'Lie flat on your back',
+      'Let feet fall open naturally',
+      'Place arms alongside body, palms facing up',
+      'Close your eyes',
+      'Scan your body and consciously relax each part',
+    ],
+  },
+  {
+    name: 'Standing Forward Bend',
+    sanskrit: 'Uttanasana',
+    image: standingForwardBend,
+    durationLabel: '30s-1 min',
+    durationSeconds: 60,
+    difficulty: 'Beginner',
+    benefits: ['Calms the brain', 'Stretches hamstrings and calves', 'Relieves stress'],
+    instructions: [
+      'Stand with feet hip-width apart',
+      'Exhale and fold forward from hips',
+      'Let head and arms hang heavy',
+      'Bend knees slightly if needed',
+      'Hold and breathe deeply',
+    ],
+  },
+  {
+    name: 'Supine Spinal Twist',
+    sanskrit: 'Supta Matsyendrasana',
+    image: spinalTwist,
+    durationLabel: '1-2 min per side',
+    durationSeconds: 120,
+    difficulty: 'Beginner',
+    benefits: ['Releases lower back tension', 'Aids digestion', 'Calming and restorative'],
+    instructions: [
+      'Lie on your back and hug knees to chest',
+      'Extend arms out to a T-shape',
+      'Drop both knees to the right',
+      'Turn your gaze to the left',
+      'Hold, then switch sides',
+    ],
+  },
+  {
+    name: 'Bridge Pose',
+    sanskrit: 'Setu Bandhasana',
+    image: bridgePose,
+    durationLabel: '30s-1 min',
+    durationSeconds: 60,
+    difficulty: 'Intermediate',
+    benefits: ['Opens chest and heart', 'Reduces anxiety', 'Strengthens back and glutes'],
+    instructions: [
+      'Lie on your back, bend knees, feet flat on floor',
+      'Place arms alongside your body, palms down',
+      'Press feet into floor, lift hips toward ceiling',
+      'Interlace fingers under your back (optional)',
+      'Hold and breathe, then slowly lower down',
+    ],
+  },
+];
+
+function formatTime(seconds: number) {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return `${m}:${s.toString().padStart(2, '0')}`;
+}
+
+function YogaPoses() {
+  const [currentPose, setCurrentPose] = useState(0);
+  const [timerSeconds, setTimerSeconds] = useState(0);
+  const [timerRunning, setTimerRunning] = useState(false);
+  const pose = poses[currentPose];
+
+  const resetTimer = useCallback(() => {
+    setTimerRunning(false);
+    setTimerSeconds(pose.durationSeconds);
+  }, [pose.durationSeconds]);
+
+  useEffect(() => {
+    setTimerSeconds(pose.durationSeconds);
+    setTimerRunning(false);
+  }, [currentPose, pose.durationSeconds]);
+
+  useEffect(() => {
+    if (!timerRunning || timerSeconds <= 0) return;
+    const id = setInterval(() => {
+      setTimerSeconds((prev) => {
+        if (prev <= 1) {
+          setTimerRunning(false);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(id);
+  }, [timerRunning, timerSeconds]);
+
+  const progress = pose.durationSeconds > 0
+    ? ((pose.durationSeconds - timerSeconds) / pose.durationSeconds) * 100
+    : 0;
+
+  return (
+    <Card className="border-0 shadow-lg">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2 font-display">
+          <Flower2 className="w-5 h-5 text-primary" />
+          Calming Yoga Poses
+        </CardTitle>
+        <CardDescription>
+          Gentle poses to release tension and promote relaxation. No experience needed.
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-5">
+        {/* Pose header with image */}
+        <div className="text-center space-y-3">
+          <div className="w-40 h-40 mx-auto rounded-2xl overflow-hidden bg-muted/30 flex items-center justify-center">
+            <img
+              src={pose.image}
+              alt={`${pose.name} yoga pose demonstration`}
+              loading="lazy"
+              width={160}
+              height={160}
+              className="w-full h-full object-cover object-center"
+            />
+          </div>
+          <h3 className="text-xl font-semibold text-foreground">{pose.name}</h3>
+          <p className="text-sm text-muted-foreground italic">{pose.sanskrit}</p>
+          <div className="flex items-center justify-center gap-3 text-sm">
+            <span className="flex items-center gap-1 text-primary">
+              <Timer className="w-3.5 h-3.5" /> {pose.durationLabel}
+            </span>
+            <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+              pose.difficulty === 'Beginner'
+                ? 'bg-green-500/15 text-green-600 dark:text-green-400'
+                : 'bg-yellow-500/15 text-yellow-600 dark:text-yellow-400'
+            }`}>
+              {pose.difficulty}
+            </span>
+          </div>
+        </div>
+
+        {/* Timer */}
+        <div className="p-4 rounded-xl bg-muted/30 space-y-3">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-medium text-foreground">Pose Timer</p>
+            <span className="text-2xl font-mono font-bold text-primary">{formatTime(timerSeconds)}</span>
+          </div>
+          <Progress value={progress} className="h-2" />
+          <div className="flex items-center justify-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setTimerRunning(!timerRunning)}
+              className="gap-1"
+              disabled={timerSeconds === 0}
+            >
+              {timerRunning ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+              {timerRunning ? 'Pause' : 'Start'}
+            </Button>
+            <Button variant="ghost" size="sm" onClick={resetTimer} className="gap-1">
+              <RotateCcw className="w-3.5 h-3.5" /> Reset
+            </Button>
+          </div>
+          {timerSeconds === 0 && (
+            <p className="text-sm text-center text-primary font-medium">✨ Great job! Pose complete.</p>
+          )}
+        </div>
+
+        {/* Instructions (above benefits) */}
+        <div className="space-y-2">
+          <p className="text-sm font-medium text-foreground">Instructions:</p>
+          <ol className="space-y-2">
+            {pose.instructions.map((step, i) => (
+              <li key={i} className="flex gap-3 text-sm text-muted-foreground">
+                <span className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 text-xs font-semibold">
+                  {i + 1}
+                </span>
+                {step}
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        {/* Benefits */}
+        <div className="p-4 rounded-xl bg-primary/5 space-y-2">
+          <p className="text-sm font-medium text-foreground">Benefits:</p>
+          <ul className="space-y-1">
+            {pose.benefits.map((b, i) => (
+              <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
+                <span className="text-primary mt-0.5">✦</span> {b}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Navigation */}
+        <div className="flex items-center justify-between pt-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setCurrentPose((p) => (p - 1 + poses.length) % poses.length)}
+            className="gap-1"
+          >
+            <ChevronLeft className="w-4 h-4" /> Previous
+          </Button>
+          <span className="text-sm text-muted-foreground">
+            {currentPose + 1} / {poses.length}
+          </span>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setCurrentPose((p) => (p + 1) % poses.length)}
+            className="gap-1"
+          >
+            Next <ChevronRight className="w-4 h-4" />
+          </Button>
+        </div>
+
+        <p className="text-xs text-muted-foreground text-center">
+          🧘 Tip: Listen to your body. Never push into pain. Modify poses as needed.
+        </p>
+      </CardContent>
+    </Card>
+  );
+}
 
 export default function SelfHelp() {
   return (
@@ -282,7 +776,7 @@ export default function SelfHelp() {
       </div>
 
       <Tabs defaultValue="breathing" className="space-y-6">
-        <TabsList className="grid grid-cols-2 md:grid-cols-4 w-full">
+        <TabsList className="grid grid-cols-3 md:grid-cols-6 w-full">
           <TabsTrigger value="breathing" className="gap-2">
             <Wind className="w-4 h-4" />
             <span className="hidden sm:inline">Breathing</span>
@@ -298,6 +792,14 @@ export default function SelfHelp() {
           <TabsTrigger value="reframing" className="gap-2">
             <RefreshCw className="w-4 h-4" />
             <span className="hidden sm:inline">Reframing</span>
+          </TabsTrigger>
+          <TabsTrigger value="music" className="gap-2">
+            <Music className="w-4 h-4" />
+            <span className="hidden sm:inline">Music</span>
+          </TabsTrigger>
+          <TabsTrigger value="yoga" className="gap-2">
+            <Flower2 className="w-4 h-4" />
+            <span className="hidden sm:inline">Yoga</span>
           </TabsTrigger>
         </TabsList>
 
@@ -315,6 +817,14 @@ export default function SelfHelp() {
 
         <TabsContent value="reframing">
           <ThoughtReframing />
+        </TabsContent>
+        
+        <TabsContent value="music">
+          <CalmingMusic />
+        </TabsContent>
+
+        <TabsContent value="yoga">
+          <YogaPoses />
         </TabsContent>
       </Tabs>
 
