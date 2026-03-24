@@ -6,6 +6,7 @@ import { Wind, Eye, Heart, RefreshCw, BookOpen } from 'lucide-react';
 import { Music, Play, Pause, Volume2, VolumeX, Flower2, ChevronLeft, ChevronRight, Timer, RotateCcw } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import { Progress } from '@/components/ui/progress';
+import { useMusicPlayer, tracks } from '@/hooks/useMusicPlayer';
 // Audio
 import gentleRain from '@/assets/audio/gentle-rain.mp3';
 import oceanWaves from '@/assets/audio/ocean-waves.mp3';
@@ -295,104 +296,8 @@ interface Track {
   emoji: string;
 }
 
-const tracks: Track[] = [
-  {
-    title: 'Gentle Rain',
-    description: 'Soft rainfall for deep relaxation',
-    url: gentleRain,
-    emoji: '🌧️',
-  },
-  {
-    title: 'Ocean Waves',
-    description: 'Peaceful ocean sounds to calm your mind',
-    url: oceanWaves,
-    emoji: '🌊',
-  },
-  {
-    title: 'Forest Birds',
-    description: 'Birdsong in a tranquil forest',
-    url: forestBirds,
-    emoji: '🐦',
-  },
-  {
-    title: 'Peaceful Piano',
-    description: 'Gentle piano melodies for focus and calm',
-    url: peacefulPiano,
-    emoji: '🎹',
-  },
-  {
-    title: 'Night Crickets',
-    description: 'Evening ambience with crickets chirping',
-    url: nightCrickets,
-    emoji: '🦗',
-  },
-];
-
 function CalmingMusic() {
-  const [currentTrack, setCurrentTrack] = useState<number | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(70);
-  const [isMuted, setIsMuted] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  useEffect(() => {
-    return () => {
-      audioRef.current?.pause();
-    };
-  }, []);
-
-  const playTrack = (index: number) => {
-    if (currentTrack === index && isPlaying) {
-      audioRef.current?.pause();
-      setIsPlaying(false);
-      return;
-    }
-
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current = null;
-    }
-
-    const audio = new Audio(tracks[index].url);
-    audio.volume = isMuted ? 0 : volume / 100;
-    audio.loop = true;
-    audio.preload = 'auto';
-
-    audio.addEventListener('playing', () => {
-      setIsPlaying(true);
-    });
-
-    audio.addEventListener('pause', () => {
-      setIsPlaying(false);
-    });
-
-    audio.addEventListener('error', () => {
-      setIsPlaying(false);
-    });
-
-    audioRef.current = audio;
-    setCurrentTrack(index);
-    audio.play().catch(() => {
-      setIsPlaying(false);
-    });
-  };
-
-  const handleVolumeChange = (val: number[]) => {
-    const v = val[0];
-    setVolume(v);
-    setIsMuted(v === 0);
-    if (audioRef.current) {
-      audioRef.current.volume = v / 100;
-    }
-  };
-
-  const toggleMute = () => {
-    const newMuted = !isMuted;
-    setIsMuted(newMuted);
-    if (audioRef.current) {
-      audioRef.current.volume = newMuted ? 0 : volume / 100;
-    }
-  };
+  const { currentTrack, isPlaying, volume, isMuted, playTrack, setVolume, toggleMute } = useMusicPlayer();
 
   return (
     <Card className="border-0 shadow-lg">
@@ -402,29 +307,35 @@ function CalmingMusic() {
           Calming Sounds
         </CardTitle>
         <CardDescription>
-          Ambient sounds and music to help you relax, focus, or sleep.
+          Ambient sounds and music to help you relax, focus, or sleep. Music continues playing even when you navigate to other sections.
         </CardDescription>
       </CardHeader>
+
       <CardContent className="space-y-5">
         {/* Volume control */}
         <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
           <Button variant="ghost" size="icon" onClick={toggleMute} className="shrink-0">
             {isMuted || volume === 0 ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
           </Button>
+
           <Slider
             value={[isMuted ? 0 : volume]}
-            onValueChange={handleVolumeChange}
+            onValueChange={(val) => setVolume(val[0])}
             max={100}
             step={1}
             className="flex-1"
           />
-          <span className="text-xs text-muted-foreground w-8 text-right">{isMuted ? 0 : volume}%</span>
+
+          <span className="text-xs text-muted-foreground w-8 text-right">
+            {isMuted ? 0 : volume}%
+          </span>
         </div>
 
         {/* Track list */}
         <div className="grid gap-3">
           {tracks.map((track, i) => {
             const active = currentTrack === i && isPlaying;
+
             return (
               <button
                 key={i}
@@ -436,14 +347,26 @@ function CalmingMusic() {
                 }`}
               >
                 <span className="text-3xl">{track.emoji}</span>
+
                 <div className="flex-1 min-w-0">
                   <p className="font-medium text-foreground">{track.title}</p>
-                  <p className="text-sm text-muted-foreground truncate">{track.description}</p>
+                  <p className="text-sm text-muted-foreground truncate">
+                    {track.description}
+                  </p>
                 </div>
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${
-                  active ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
-                }`}>
-                  {active ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
+
+                <div
+                  className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${
+                    active
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-muted text-muted-foreground'
+                  }`}
+                >
+                  {active ? (
+                    <Pause className="w-4 h-4" />
+                  ) : (
+                    <Play className="w-4 h-4 ml-0.5" />
+                  )}
                 </div>
               </button>
             );
@@ -451,13 +374,12 @@ function CalmingMusic() {
         </div>
 
         <p className="text-xs text-muted-foreground text-center">
-          🎧 Tip: Use headphones for the best experience. Sounds loop continuously.
+          🎧 Music keeps playing as you navigate. A mini-player appears on other pages.
         </p>
       </CardContent>
     </Card>
   );
 }
-
 interface Pose {
   name: string;
   sanskrit: string;

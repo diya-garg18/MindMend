@@ -1,9 +1,9 @@
 import { createContext, useContext, useState, useRef, useCallback, useEffect, ReactNode } from 'react';
-import gentleRain from '@/assets/audio/gentle-rain.wav';
-import oceanWaves from '@/assets/audio/ocean-waves.wav';
-import forestBirds from '@/assets/audio/forest-birds.wav';
-import peacefulPiano from '@/assets/audio/peaceful-piano.wav';
-import nightCrickets from '@/assets/audio/night-crickets.wav';
+import gentleRain from '@/assets/audio/gentle-rain.mp3';
+import oceanWaves from '@/assets/audio/ocean-waves.mp3';
+import forestBirds from '@/assets/audio/forest-birds.mp3';
+import peacefulPiano from '@/assets/audio/peaceful-piano.mp3';
+import nightCrickets from '@/assets/audio/night-crickets.mp3';
 
 export interface Track {
   title: string;
