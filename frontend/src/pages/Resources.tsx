@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Brain, Moon, Heart, BookOpen, Zap, Coffee, Users, GraduationCap } from 'lucide-react';
+import { Brain, Moon, Heart, BookOpen, Zap, Coffee, Users, GraduationCap, Flame, Smartphone, Clock } from 'lucide-react';
 
 const resourceSections = [
   {
@@ -146,7 +146,107 @@ const resourceSections = [
         answer: 'Disagreements are normal. Try to communicate calmly, listen to understand (not just to respond), and look for solutions together. It\'s okay to take a break and cool down before discussing difficult topics.'
       }
     ]
-  }
+  },
+  ,
+{
+  id: 'focus-productivity',
+  icon: Brain,
+  title: 'Focus & Productivity',
+  description: 'Improving concentration and study habits',
+  content: [
+    {
+      question: 'Why do I struggle to focus?',
+      answer: 'Difficulty focusing can come from distractions, stress, lack of sleep, or mental overload. It\'s very common, especially when you have a lot on your mind. Your brain may just need better structure and fewer distractions.'
+    },
+    {
+      question: 'How can I improve focus while studying?',
+      answer: '• Study in short sessions (25-30 minutes)\n• Keep your phone away or on silent\n• Study one subject at a time\n• Use a clean and quiet workspace\n• Take regular breaks\n• Start with small tasks to build momentum'
+    },
+    {
+      question: 'How to stop procrastinating?',
+      answer: '• Start with just 5 minutes\n• Break tasks into smaller steps\n• Set clear deadlines\n• Remove distractions\n• Reward yourself after completing tasks\n• Don\'t wait for motivation — action creates motivation'
+    },
+    {
+      question: 'What is the Pomodoro technique?',
+      answer: 'It is a simple method where you study for 25 minutes and then take a 5-minute break. After 4 sessions, you take a longer break. It helps improve focus and prevents burnout.'
+    }
+  ]
+},
+
+{
+  id: 'digital-wellbeing',
+  icon: Smartphone,
+  title: 'Digital Wellbeing',
+  description: 'Managing screen time and social media',
+  content: [
+    {
+      question: 'How does screen time affect mental health?',
+      answer: 'Too much screen time can lead to reduced focus, poor sleep, and increased stress. Social media can sometimes cause comparison and negative thoughts, especially when you constantly see others\' highlights.'
+    },
+    {
+      question: 'How can I reduce screen time?',
+      answer: '• Set daily screen time limits\n• Turn off unnecessary notifications\n• Keep your phone away while studying\n• Avoid screens before sleeping\n• Spend time doing offline activities like walking or reading'
+    },
+    {
+      question: 'Is social media bad?',
+      answer: 'Not always. It can help you stay connected and entertained. But too much use or unhealthy comparison can affect your mood. Balance is the key.'
+    },
+    {
+      question: 'Simple healthy habits',
+      answer: '• Take breaks from screens\n• Don\'t check your phone first thing in the morning\n• Have “no phone” time during meals or study sessions\n• Follow positive and supportive content'
+    }
+  ]
+},
+
+{
+  id: 'motivation',
+  icon: Flame,
+  title: 'Motivation & Discipline',
+  description: 'Staying consistent even when it’s hard',
+  content: [
+    {
+      question: 'Why do I feel unmotivated?',
+      answer: 'Lack of motivation can happen due to stress, burnout, fear of failure, or feeling overwhelmed. It doesn\'t mean you are lazy — it usually means you need rest or a better approach.'
+    },
+    {
+      question: 'How to stay motivated?',
+      answer: '• Set small, realistic goals\n• Track your progress\n• Celebrate small wins\n• Surround yourself with positive influences\n• Remind yourself why you started'
+    },
+    {
+      question: 'Motivation vs discipline',
+      answer: 'Motivation comes and goes, but discipline helps you stay consistent. Even when you don’t feel like doing something, discipline helps you take action anyway.'
+    },
+    {
+      question: 'What if I feel stuck?',
+      answer: 'Start small. Even 5 minutes of effort is progress. Taking action, no matter how small, helps break the feeling of being stuck.'
+    }
+  ]
+},
+
+{
+  id: 'time-management',
+  icon: Clock,
+  title: 'Time Management',
+  description: 'Using your time effectively',
+  content: [
+    {
+      question: 'Why do I feel like I don’t have enough time?',
+      answer: 'This often happens when tasks are not planned properly or when you try to do too many things at once. Poor time management can make even small tasks feel overwhelming.'
+    },
+    {
+      question: 'How can I manage my time better?',
+      answer: '• Make a simple daily to-do list\n• Prioritize important tasks\n• Avoid multitasking\n• Set time limits for tasks\n• Use planners or apps to stay organized'
+    },
+    {
+      question: 'What is prioritization?',
+      answer: 'It means focusing on the most important tasks first instead of doing everything at once. Not all tasks are equally important.'
+    },
+    {
+      question: 'Balancing studies and life',
+      answer: 'Make time for both work and rest. Taking breaks and relaxing is not wasting time — it helps you perform better.'
+    }
+  ]
+}
 ];
 
 export default function Resources() {
