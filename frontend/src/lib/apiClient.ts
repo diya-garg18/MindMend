@@ -77,6 +77,13 @@ class ApiClient {
     });
   }
 
+  async sendGuestMessage(messages: any[]) {
+    return this.request('/chat/guest', {
+      method: 'POST',
+      body: JSON.stringify({ messages }),
+    });
+  }
+
   async getConversations(token: string) {
     return this.request('/chat/conversations', { token });
   }

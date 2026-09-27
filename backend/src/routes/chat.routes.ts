@@ -77,6 +77,29 @@ router.get('/conversations/:id/messages', authenticate, async (req: AuthRequest,
   }
 });
 
+// Guest chat - no auth, no persistence (session-only, matches guest mode on the frontend)
+router.post('/guest', async (req, res: Response) => {
+  try {
+    const { messages } = messageSchema.pick({ messages: true }).parse(req.body);
+
+    const aiResponse = await getChatCompletion(messages);
+
+    res.json({
+      message: {
+        role: 'assistant',
+        content: aiResponse.content,
+        detectedMood: aiResponse.detectedMood,
+      },
+    });
+  } catch (error) {
+    console.error('Guest chat error:', error);
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({ error: 'Invalid input', details: error.errors });
+    }
+    res.status(500).json({ error: 'Failed to process chat message' });
+  }
+});
+
 // Send message and get AI response
 router.post('/', authenticate, async (req: AuthRequest, res: Response) => {  try {
     const { messages, conversationId } = messageSchema.parse(req.body);

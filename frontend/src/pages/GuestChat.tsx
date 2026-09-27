@@ -9,8 +9,12 @@ import { useToast } from '@/hooks/use-toast';
 import { Send, Loader2, Brain, User, LogIn, AlertTriangle, MapPin } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import ReactMarkdown from 'react-markdown';
+import { apiClient } from '@/lib/apiClient';
 
-// Crisis keywords for guest safety
+// Crisis keywords for guest safety.
+// Mirrors (but does not import) the lists in backend/src/services/groq.service.ts --
+// guest mode has no backend session, so detection is duplicated client-side.
+// That backend copy is the authoritative/more complete list; update both if either changes.
 const crisisKeywords = [
   'suicide', 'suicidal', 'kill myself', 'end my life', 'want to die',
   'self-harm', 'hurt myself', 'cutting', 'overdose', 'no reason to live'
@@ -82,60 +86,10 @@ You don't have to face this alone. Would you like to talk more, or can I help yo
         .map(m => ({ role: m.role, content: m.content }))
         .concat({ role: 'user' as const, content: userMessage });
 
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        },
-        body: JSON.stringify({ messages: apiMessages, isGuest: true }),
-      });
+      const response: any = await apiClient.sendGuestMessage(apiMessages);
 
-      if (!response.ok) {
-        throw new Error('Failed to get response');
-      }
-
-      if (!response.body) {
-        throw new Error('No response body');
-      }
-
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let assistantContent = '';
-      let buffer = '';
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        buffer += decoder.decode(value, { stream: true });
-
-        let newlineIndex: number;
-        while ((newlineIndex = buffer.indexOf('\n')) !== -1) {
-          let line = buffer.slice(0, newlineIndex);
-          buffer = buffer.slice(newlineIndex + 1);
-
-          if (line.endsWith('\r')) line = line.slice(0, -1);
-          if (line.startsWith(':') || line.trim() === '') continue;
-          if (!line.startsWith('data: ')) continue;
-
-          const jsonStr = line.slice(6).trim();
-          if (jsonStr === '[DONE]') continue;
-
-          try {
-            const parsed = JSON.parse(jsonStr);
-            const content = parsed.choices?.[0]?.delta?.content;
-            if (content) {
-              assistantContent += content;
-            }
-          } catch {
-            // Incomplete JSON
-          }
-        }
-      }
-
-      if (assistantContent) {
-        addGuestMessage('assistant', assistantContent);
+      if (response.message?.content) {
+        addGuestMessage('assistant', response.message.content);
       }
 
     } catch (error) {
