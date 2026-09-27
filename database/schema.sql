@@ -7,7 +7,7 @@ DROP TABLE IF EXISTS mood_entries CASCADE;
 DROP TABLE IF EXISTS profiles CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 
--- Create users table (replacing Supabase auth.users)
+-- Create users table (application-managed auth)
 CREATE TABLE users (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   email VARCHAR(255) UNIQUE NOT NULL,

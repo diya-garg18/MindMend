@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// Hosted free-tier Postgres (Neon, Render, Supabase, etc.) requires SSL; local dev does not.
+// Hosted free-tier Postgres (Neon, Render, etc.) requires SSL; local dev does not.
 const useSSL = process.env.DB_SSL === 'true' || process.env.NODE_ENV === 'production';
 
 // Database connection pool
