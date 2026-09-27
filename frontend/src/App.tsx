@@ -38,12 +38,11 @@ const App = () => (
             <Toaster />
             <Sonner />
             <MusicPlayerProvider>
-            <BrowserRouter basename="/MindMend">
+            <BrowserRouter>
               <Routes>
                 {/* Public routes */}
                 <Route path="/" element={<Index />} />
                 <Route path="/auth" element={<Auth />} />
-                <Route path="/reset-password" element={<ResetPassword />} />
                 <Route path="/guest-chat" element={<GuestChat />} />
                 
                 {/* Protected routes with sidebar layout */}

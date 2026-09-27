@@ -19,7 +19,7 @@ export default function EmergencyButton() {
   const [isOpen, setIsOpen] = useState(false);
 
   // Check if we're on auth pages
-  const isAuthPage = location.pathname === '/auth' || location.pathname === '/reset-password';
+  const isAuthPage = location.pathname === '/auth';
 
   const handleShowAllResources = () => {
     setIsOpen(false);

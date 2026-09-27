@@ -49,16 +49,6 @@ app.use('/api/mood', moodRoutes);
 app.use('/api/journal', journalRoutes);
 app.use('/api/profile', profileRoutes);
 
-// ADD THIS DEBUG CODE:
-console.log('📍 Registered routes:');
-app._router.stack.forEach((r) => {
-  if (r.route) {
-    console.log(`  ${Object.keys(r.route.methods).join(', ').toUpperCase()} ${r.route.path}`);
-  } else if (r.name === 'router') {
-    console.log(`  Router: ${r.regexp}`);
-  }
-});
-
 // 404 handler
 app.use((req, res) => {
   res.status(404).json({ error: 'Route not found' });
