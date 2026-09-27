@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
+import jwt, { SignOptions } from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -50,6 +50,6 @@ export const generateToken = (userId: string, email: string): string => {
   return jwt.sign(
     { userId, email },
     JWT_SECRET as string,
-    { expiresIn: expiresIn as string }
+    { expiresIn: expiresIn as SignOptions['expiresIn'] }
   );
 };

@@ -4,6 +4,9 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+// Hosted free-tier Postgres (Neon, Render, Supabase, etc.) requires SSL; local dev does not.
+const useSSL = process.env.DB_SSL === 'true' || process.env.NODE_ENV === 'production';
+
 // Database connection pool
 export const pool = new Pool({
   host: process.env.DB_HOST || 'localhost',
@@ -11,6 +14,7 @@ export const pool = new Pool({
   database: process.env.DB_NAME || 'mindmend',
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
+  ssl: useSSL ? true : false,
   max: 20, // Maximum number of clients in the pool
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 2000,
